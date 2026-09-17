@@ -274,7 +274,6 @@ The highest-scoring branch is chosen. Ties are broken deterministically
 (higher workload score first, then lowest branch ID) so behaviour is never
 ambiguous.
 
-### Why these weights, and why hardcoded
 Weights are **hardcoded** in `backend/src/config/allocation.js` 
 
 - **Workload weighted highest (0.40)** — an overloaded branch delays every
@@ -420,5 +419,4 @@ cleanly (409) if it's no longer available.
 - Branch-scoped `branch_manager` role, with per-branch query scoping.
 - Partial/split fulfillment across branches for multi-product orders that
   no single branch can fully cover.
-- Admin-configurable allocation weights (currently hardcoded, deliberately,
-  for v1 — see rationale above).
+- Admin-configurable allocation weights (currently hardcoded)

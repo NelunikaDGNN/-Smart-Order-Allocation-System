@@ -18,7 +18,7 @@ workload.
 | Auth | JWT (`jsonwebtoken`), `bcrypt` password hashing |
 | AI/ML | Python, scikit-learn (TF-IDF + Logistic Regression) |
 | Security middleware | `helmet`, `express-rate-limit`, `express-validator`, `cors` |
-| Testing | Jest |
+
 
 ---
 
@@ -145,7 +145,7 @@ Seeded accounts:
 - Admin: `admin@dartcodes.test` / `Admin@12345`
 - Customer: `customer@dartcodes.test` / `Customer@12345`
 
-### 3. AI/ML classifier (optional but required for note classification to work)
+### 3. AI/ML classifier
 ```bash
 cd backend/ml
 pip install -r requirements.txt
@@ -275,25 +275,13 @@ The highest-scoring branch is chosen. Ties are broken deterministically
 ambiguous.
 
 ### Why these weights, and why hardcoded
-Weights are **hardcoded** in `backend/src/config/allocation.js` — one file,
-not scattered magic numbers — and were chosen from reasoned business
-priority, not tuned against historical data (none exists yet for a new
-system):
+Weights are **hardcoded** in `backend/src/config/allocation.js` 
 
 - **Workload weighted highest (0.40)** — an overloaded branch delays every
-  order it touches; this is the failure mode most likely to hurt customer
-  experience.
-- **Proximity next (0.35)** — affects delivery time, but a slightly farther
-  branch is a *slower* order, not a *broken* one.
+  order it touches
+- **Proximity next (0.35)** — affects delivery time
 - **Stock surplus weighted lowest (0.25)** — eligibility already guarantees
-  "enough" stock; surplus is mainly a tiebreak/robustness signal.
-
-We considered learning these weights with ML (e.g. logistic regression over
-labeled preference scenarios) but rejected it for v1: there's no historical
-fulfillment-outcome data to learn from, and any "ML-learned" weight without
-that data would really just be a regression over our own synthetic opinions
-— not more rigorous than stating the reasoning directly. See "Future
-improvements" below.
+  "enough" stock
 
 ### Data structures & algorithms
 - **HashMap** (`productId → Map<branchId, quantity>`) built from the
